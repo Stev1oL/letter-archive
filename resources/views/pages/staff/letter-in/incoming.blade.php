@@ -1,7 +1,7 @@
-@extends('layouts.admin')
+@extends('layouts.staff')
 
 @section('title')
-Surat Keluar
+Surat Masuk
 @endsection
 
 @section('container')
@@ -12,8 +12,8 @@ Surat Keluar
                 <div class="row align-items-center justify-content-between pt-3">
                     <div class="col-auto mb-3">
                         <h1 class="page-header-title">
-                            <div class="page-header-icon"><i data-feather="mail"></i><i data-feather="arrow-left"></i></div>
-                            Data Surat Keluar
+                            <div class="page-header-icon"><i data-feather="mail"></i><i data-feather="arrow-right"></i></div>
+                            Data Surat Masuk
                         </h1>
                     </div>
                 </div>
@@ -28,11 +28,11 @@ Surat Keluar
                     <div class="card-header">
                         Data :
                         <div>
-                            <a class="btn btn-sm btn-warning" href="{{ route('letterout.create') }}">
+                            <a class="btn btn-sm btn-warning" href="{{ route('letter.create') }}">
                                 <i data-feather="plus-square"></i> &nbsp;
                                 Tambah Surat
                             </a>
-                            <a class="btn btn-sm btn-success" href="{{ route('print-surat-keluar') }}" target="_blank">
+                            <a class="btn btn-sm btn-success" href="{{ route('print-surat-masuk') }}" target="_blank">
                                 <i data-feather="printer"></i> &nbsp;
                                 Cetak Laporan
                             </a>
@@ -61,16 +61,14 @@ Surat Keluar
                             <table class="table table-striped table-hover table-sm" id="crudTable">
                                 <thead>
                                     <tr>
-                                        <th width="10">No.</th>
+                                        <th>No.</th>
                                         <th>No. Surat</th>
-                                        <th>Tanggal</th>
-                                        <th>No. Awal</th>
-                                        <th>No. Urut Sementara</th>
+                                        <th>Tanggal Masuk</th>
+                                        <th>Tanggal Terima</th>
+                                        <th>No. Agenda</th>
                                         <th>Perihal</th>
-                                        <th>Tujuan</th>
-                                        <th>Sifat</th>
-                                        <th>Tembusan</th>
-                                        <th>Isi</th>
+                                        <th>Disposisi</th>
+                                        <th>Pengirim</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -104,42 +102,36 @@ Surat Keluar
                 name: 'letter_no'
             },
             {
-                data: 'letterout_date',
-                name: 'letterout_date'
+                data: 'letter_date',
+                name: 'letter_date',
+                width: '10%'
             },
             {
-                data: 'first_number',
-                name: 'first_number'
+                data: 'date_received',
+                name: 'date_received',
+                width: '10%'
             },
             {
-                data: 'temp_number',
-                name: 'temp_number'
+                data: 'agenda_no',
+                name: 'agenda_no'
             },
             {
                 data: 'regarding',
                 name: 'regarding'
             },
             {
-                data: 'purpose',
-                name: 'purpose'
+                data: 'disposisi',
+                name: 'disposisi'
             },
             {
-                data: 'attribute',
-                name: 'attribute'
-            },
-            {
-                data: 'copy',
-                name: 'copy'
-            },
-            {
-                data: 'content',
-                name: 'content'
+                data: 'sender.name',
+                name: 'sender.name'
             },
             {
                 data: 'action',
                 name: 'action',
                 orderable: false,
-                searcable: false,
+                searcable: true,
                 width: '15%'
             },
         ]

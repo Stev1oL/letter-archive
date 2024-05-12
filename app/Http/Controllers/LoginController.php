@@ -9,7 +9,7 @@ class LoginController extends Controller
 {
     public function index()
     {
-        return view('auth.login',[
+        return view('auth.login', [
             'title' => 'Login'
         ]);
     }
@@ -21,10 +21,14 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
 
-        if(Auth::attempt($credentials))
-        {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('admin/dashboard');
+            if (Auth::user()->role === 'super_admin') {
+                return redirect()->intended('admin/dashboard');
+            } elseif (Auth::user()->role === 'admin') {
+                return redirect()->intended('staff/staff-dashboard');
+            }
+            // return redirect()->intended('admin/dashboard');
         }
 
         return back()->with('loginError', 'Login Failed!');

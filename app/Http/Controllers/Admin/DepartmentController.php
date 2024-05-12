@@ -19,10 +19,10 @@ class DepartmentController extends Controller
             return Datatables::of($query)
                 ->addColumn('action', function ($item) {
                     return '
-                        <a class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#updateModal'.$item->id.'">
+                        <a class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#updateModal' . $item->id . '">
                             <i class="fas fa-edit"></i> &nbsp; Ubah
                         </a>
-                        <form action="' . route('department.destroy', $item->id) . '" method="POST" onsubmit="return confirm('."'Anda akan menghapus item ini dari situs anda?'".')">
+                        <form action="' . route('department.destroy', $item->id) . '" method="POST" onsubmit="return confirm(' . "'Anda akan menghapus item ini dari situs anda?'" . ')">
                             ' . method_field('delete') . csrf_field() . '
                             <button class="btn btn-danger btn-xs">
                                 <i class="far fa-trash-alt"></i> &nbsp; Hapus
@@ -37,7 +37,7 @@ class DepartmentController extends Controller
         }
         $department = Department::all();
 
-        return view('pages.admin.department.index',[
+        return view('pages.admin.department.index', [
             'department' => $department
         ]);
     }
@@ -51,15 +51,19 @@ class DepartmentController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'office' => 'required',
+            'institution' => 'required'
         ]);
 
         Department::create([
-            'name' => $request->name
+            'name' => $request->name,
+            'office' => $request->office,
+            'institution' => $request->institution
         ]);
 
         return redirect()
-                    ->route('department.index')
-                    ->with('success', 'Sukses! 1 Data Berhasil Disimpan');
+            ->route('department.index')
+            ->with('success', 'Sukses! 1 Data Berhasil Disimpan');
     }
 
     public function show($id)
@@ -75,17 +79,21 @@ class DepartmentController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
+            'office' => 'required',
+            'institution' => 'required'
         ]);
 
         Department::where('id', $id)
-                ->update([
-                    'name' => $request->name
-                ]);
+            ->update([
+                'name' => $request->name,
+                'office' => $request->office,
+                'institution' => $request->institution
+            ]);
 
         return redirect()
-                    ->route('department.index')
-                    ->with('success', 'Sukses! 1 Data telah diperbarui');
+            ->route('department.index')
+            ->with('success', 'Sukses! 1 Data telah diperbarui');
     }
 
     public function destroy($id)
@@ -95,7 +103,7 @@ class DepartmentController extends Controller
         $item->delete();
 
         return redirect()
-                    ->route('department.index')
-                    ->with('success', 'Sukses! 1 Data Berhasil Dihapus');
+            ->route('department.index')
+            ->with('success', 'Sukses! 1 Data Berhasil Dihapus');
     }
 }

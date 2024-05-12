@@ -55,7 +55,9 @@ Departemen
                                 <thead>
                                     <tr>
                                         <th width="10">No.</th>
-                                        <th>Nama Departemen</th>
+                                        <th>Nama Pegawai</th>
+                                        <th>Jabatan</th>
+                                        <th>Lembaga</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -81,8 +83,16 @@ Departemen
                 <div class="modal-body">
                     <div class="mb-3">
                         <div class="col-md-12">
-                            <label for="post_id">Nama Departemen</label>
-                            <input type="text" name="name" class="form-control" placeholder="Masukan Nama Departemen.." required>
+                            <label for="post_id">Nama Pegawai</label>
+                            <input type="text" name="name" class="form-control" placeholder="Masukan Nama Pegawai.." required>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="post_id">Jabatan</label>
+                            <input type="text" name="office" class="form-control" placeholder="Masukan Jabatan.." required>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="post_id">Lembaga</label>
+                            <input type="text" name="institution" class="form-control" placeholder="Masukan Lembaga.." required>
                         </div>
                     </div>
                 </div>
@@ -99,6 +109,8 @@ Departemen
 @php
 $id = $item->id;
 $name = $item->name;
+$office = $item->office;
+$institution = $item->institution;
 @endphp
 <div class="modal fade" id="updateModal{{ $id }}" role="dialog" aria-labelledby="createModal" aria-hidden="true" style="overflow:hidden;">
     <div class="modal-dialog" role="document">
@@ -113,8 +125,16 @@ $name = $item->name;
                 <div class="modal-body">
                     <div class="mb-3">
                         <div class="col-md-12">
-                            <label for="post_id">Nama Departemen</label>
-                            <input type="text" name="name" value="{{ $name; }}" class="form-control" placeholder="Masukan Nama Departemen.." required>
+                            <label for="post_id">Nama Pegawai</label>
+                            <input type="text" name="name" value="{{ $name; }}" class="form-control" placeholder="Masukan Nama Pegawai.." required>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="post_id">Jabatan</label>
+                            <input type="text" name="office" value="{{ $office; }}" class="form-control" placeholder="Masukan Jabatan.." required>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="post_id">Lembaga</label>
+                            <input type="text" name="institution" value="{{ $institution; }}" class="form-control" placeholder="Masukan Lembaga.." required>
                         </div>
                     </div>
                 </div>
@@ -146,6 +166,14 @@ $name = $item->name;
             {
                 data: 'name',
                 name: 'name'
+            },
+            {
+                data: 'office',
+                name: 'office'
+            },
+            {
+                data: 'institution',
+                name: 'institution'
             },
             {
                 data: 'action',

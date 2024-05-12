@@ -28,8 +28,13 @@ class LetteroutController extends Controller
         $validatedData = $request->validate([
             'letter_no' => 'required',
             'letterout_date' => 'required',
+            'first_number',
+            'temp_number',
             'regarding' => 'required',
             'purpose' => 'required',
+            'attribute' => 'required',
+            'copy' => 'required',
+            'content' => 'required',
             'letter_file' => 'required|mimes:pdf|file',
             'letter_type' => 'required',
         ]);
@@ -113,8 +118,13 @@ class LetteroutController extends Controller
         $validatedData = $request->validate([
             'letter_no' => 'required',
             'letterout_date' => 'required',
+            'first_number' => 'required',
+            'temp_number' => 'required',
             'regarding' => 'required',
             'purpose' => 'required',
+            'attribute' => 'required',
+            'copy' => 'required',
+            'content' => 'required',
             'letter_file' => 'mimes:pdf|file',
             'letter_type' => 'required',
         ]);
@@ -124,7 +134,7 @@ class LetteroutController extends Controller
         if ($request->file('letter_file')) {
             $validatedData['letter_file'] = $request->file('letter_file')->store('assets/letter-file');
         }
-            $redirect = 'surat-keluar';
+        $redirect = 'surat-keluar';
 
         $item->update($validatedData);
 
@@ -139,7 +149,7 @@ class LetteroutController extends Controller
 
         if ($item->letter_type == 'Surat Keluar') {
             $redirect = 'surat-keluar';
-        } 
+        }
 
         Storage::delete($item->letter_file);
 

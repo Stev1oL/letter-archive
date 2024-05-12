@@ -4,7 +4,8 @@
             <!-- Sidenav Menu Heading (Core)-->
             <div class="sidenav-menu-heading">Menu</div>
             <!-- Sidenav Link (Dashboard)-->
-            <a class="nav-link {{ (request()->is('admin/dashboard')) ? 'active' : '' }}" href="{{ route('admin-dashboard') }}">
+            @if(Auth::user()->role === 'super_admin')
+            <a class="nav-link {{ (request()->is('admin/dashboard')) ? 'active' : '' }}" href="{{ route('superadmin-dashboard') }}">
                 <div class="nav-link-icon"><i data-feather="activity"></i></div>
                 Dashboard
             </a>
@@ -32,6 +33,20 @@
                 <div class="nav-link-icon"><i data-feather="user"></i></div>
                 Data User
             </a>
+            @elseif(Auth::user()->role === 'admin')
+            <a class="nav-link {{ (request()->is('staff/dashboard')) ? 'active' : '' }}" href="{{ route('admin-dashboard') }}">
+                <div class="nav-link-icon"><i data-feather="activity"></i></div>
+                Dashboard
+            </a>
+            <a class="nav-link {{ (request()->is('staff/letter-in/surat-masuk')) ? 'active' : '' }}" href="{{ route('surat-masuk') }}">
+                <div class="nav-link-icon"><i data-feather="mail"></i></div>
+                Surat Masuk
+            </a>
+            <a class="nav-link {{ (request()->is('staff/letter-out/surat-keluar')) ? 'active' : '' }}" href="{{ route('surat-keluar') }}">
+                <div class="nav-link-icon"><i data-feather="mail"></i></div>
+                Surat Keluar
+            </a>
+            @endif
         </div>
     </div>
     <!-- Sidenav Footer-->

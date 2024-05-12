@@ -11,9 +11,9 @@ class Department extends Model
 
     protected $fillable = [
         'name',
+        'office',
+        'institution'
     ];
 
-    protected $hidden = [
-
-    ];
+    protected $hidden = [];
 }

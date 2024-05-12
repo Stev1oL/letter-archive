@@ -1,7 +1,7 @@
-@extends('layouts.admin')
+@extends('layouts.staff')
 
 @section('title')
-Tambah Surat Keluar
+Tambah Surat
 @endsection
 
 @section('container')
@@ -13,13 +13,13 @@ Tambah Surat Keluar
                     <div class="col-auto mb-3">
                         <h1 class="page-header-title">
                             <div class="page-header-icon"><i data-feather="file-text"></i></div>
-                            Tambah Surat Keluar
+                            Tambah Surat Masuk
                         </h1>
                     </div>
                     <div class="col-12 col-xl-auto mb-3">
-                        <a class="btn btn-sm btn-light text-primary" href="{{ route('surat-keluar') }}">
+                        <a class="btn btn-sm btn-light text-primary" href="{{ route('surat-masuk') }}">
                             <i class="me-1" data-feather="arrow-left"></i>
-                            Kembali ke Semua Surat keluar
+                            Kembali ke Semua Disposisi
                         </a>
                     </div>
                 </div>
@@ -38,18 +38,18 @@ Tambah Surat Keluar
             <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         @endif
-        <form action="{{ route('letterout.store') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('letter.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="row gx-4">
                 <div class="col-lg-9">
                     <div class="card mb-4">
-                        <div class="card-header">Form Surat Keluar</div>
+                        <div class="card-header">Form Surat</div>
                         <div class="card-body">
                             <div class="mb-3 row">
                                 <label for="letter_type" class="col-sm-3 col-form-label">Jenis Surat</label>
                                 <div class="col-sm-9">
                                     <select name="letter_type" class="form-control" required>
-                                        <option value="Surat Keluar" {{ (old('letter_type') == 'Surat Keluar')? 'selected':''; }}>Surat Keluar</option>
+                                        <option value="Surat Masuk" {{ (old('letter_type') == 'Surat Masuk')? 'selected':''; }}>Surat Masuk</option>
                                     </select>
                                 </div>
                                 @error('letter_type')
@@ -70,40 +70,38 @@ Tambah Surat Keluar
                                 @enderror
                             </div>
                             <div class="mb-3 row">
-                                <label for="letterout_date" class="col-sm-3 col-form-label">Tanggal Surat</label>
+                                <label for="letter_date" class="col-sm-3 col-form-label">Tanggal Surat</label>
                                 <div class="col-sm-9">
-                                    <input type="date" class="form-control @error('letterout_date') is-invalid @enderror" value="{{ old('letterout_date') }}" name="letterout_date" required>
+                                    <input type="date" class="form-control @error('letter_date') is-invalid @enderror" value="{{ old('letter_date') }}" name="letter_date" required>
                                 </div>
-                                @error('letterout_date')
-                                <div class="invalid-feedback">
-                                    {{ $message; }}
-                                </div>
-                                @enderror
-                            </div>
-
-                            <!-- <div class="mb-3 row">
-                                <label for="first_number" class="col-sm-3 col-form-label">No. Awal</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control @error('first_number') is-invalid @enderror" value="{{ old('first_number') }}" name="first_number" placeholder="Nomor Awal.." required>
-                                </div>
-                                @error('first_number')
+                                @error('letter_date')
                                 <div class="invalid-feedback">
                                     {{ $message; }}
                                 </div>
                                 @enderror
                             </div>
                             <div class="mb-3 row">
-                                <label for="temp_number" class="col-sm-3 col-form-label">No. Urut Sementara</label>
+                                <label for="date_received" class="col-sm-3 col-form-label">Tanggal Diterima</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control @error('temp_number') is-invalid @enderror" value="{{ old('temp_number') }}" name="temp_number" placeholder="Nomor Urut Sementara.." required>
+                                    <input type="date" class="form-control @error('date_received') is-invalid @enderror" value="{{ old('date_received') }}" name="date_received" required>
                                 </div>
-                                @error('temp_number')
+                                @error('date_received')
                                 <div class="invalid-feedback">
                                     {{ $message; }}
                                 </div>
                                 @enderror
-                            </div> -->
-
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="agenda_no" class="col-sm-3 col-form-label">No.Agenda</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control @error('agenda_no') is-invalid @enderror" value="{{ old('agenda_no') }}" name="agenda_no" placeholder="No.Agenda.." required>
+                                </div>
+                                @error('agenda_no')
+                                <div class="invalid-feedback">
+                                    {{ $message; }}
+                                </div>
+                                @enderror
+                            </div>
                             <div class="mb-3 row">
                                 <label for="regarding" class="col-sm-3 col-form-label">Perihal</label>
                                 <div class="col-sm-9">
@@ -116,11 +114,27 @@ Tambah Surat Keluar
                                 @enderror
                             </div>
                             <div class="mb-3 row">
-                                <label for="purpose" class="col-sm-3 col-form-label">Tujuan</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control @error('purpose') is-invalid @enderror" value="{{ old('purpose') }}" name="purpose" placeholder="Tujuan..." required>
+                                <label for="disposisi" class="col-sm-3 col-form-label">Tujuan Disposisi</label>
+                                <div class="col-sm-9 row" style="float: right;">
+                                    <div class="col-sm-4">
+                                        <input type="checkbox" value="Wakil Rektor I" name="disposisi[]"> Wakil Rektor I <br>
+                                        <input type="checkbox" value="Kepala Biro" name="disposisi[]"> Kepala Biro <br>
+                                        <input type="checkbox" value="Kasubbag" name="disposisi[]"> Kasubbag <br>
+                                        <input type="checkbox" value="Dekan Fakultas" name="disposisi[]"> Dekan Fakultas <br>
+                                        <input type="checkbox" value="Koordinator Prodi" name="disposisi[]"> Koordinator Prodi <br>
+                                        <input type="checkbox" value="Kepala Unit" name="disposisi[]"> Kepala Unit <br>
+                                        <input type="checkbox" value="-" name="disposisi[]"> -
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <input type="checkbox" value="Wakil Rektor II" name="disposisi[]"> Wakil Rektor II <br>
+                                        <input type="checkbox" value="Kabag" name="disposisi[]"> Kabag <br>
+                                        <input type="checkbox" value="Direktur" name="disposisi[]"> Direktur <br>
+                                        <input type="checkbox" value="Ketua Jurusan" name="disposisi[]"> Ketua Jurusan <br>
+                                        <input type="checkbox" value="Ketua Lembaga" name="disposisi[]"> Ketua Lembaga <br>
+                                        <input type="checkbox" value="Kepala Lab" name="disposisi[]"> Kepala Lab <br>
+                                    </div>
                                 </div>
-                                @error('purpose')
+                                @error('disposisi')
                                 <div class="invalid-feedback">
                                     {{ $message; }}
                                 </div>
@@ -128,44 +142,42 @@ Tambah Surat Keluar
                             </div>
 
                             <div class="mb-3 row">
-                                <label for="attribute" class="col-sm-3 col-form-label">Sifat</label>
+                                <label for="department_id" class="col-sm-3 col-form-label">Departemen</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control @error('attribute') is-invalid @enderror" value="{{ old('attribute') }}" name="attribute" placeholder="Sifat..." required>
+                                    <select name="department_id" class="form-control" required>
+                                        <option value="">Pilih Departemen...</option>
+                                        @foreach ($departments as $department)
+                                        <option value="{{ $department->id }}" {{ (old('department_id') == $department->id)? 'selected':''; }}>{{ $department->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                @error('attribute')
+                                @error('department_id')
                                 <div class="invalid-feedback">
                                     {{ $message; }}
                                 </div>
                                 @enderror
                             </div>
                             <div class="mb-3 row">
-                                <label for="copy" class="col-sm-3 col-form-label">Tembusan</label>
+                                <label for="sender_id" class="col-sm-3 col-form-label">Pengirim</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control @error('copy') is-invalid @enderror" value="{{ old('copy') }}" name="copy" placeholder="Tembusan..." required>
+                                    <select name="sender_id" class="form-control" required>
+                                        <option value="">Pilih Pengirim..</option>
+                                        @foreach ($senders as $sender)
+                                        <option value="{{ $sender->id }}" {{ (old('sender_id') == $sender->id)? 'selected':''; }}>{{ $sender->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                @error('copy')
+                                @error('sender_id')
                                 <div class="invalid-feedback">
                                     {{ $message; }}
                                 </div>
                                 @enderror
                             </div>
-                            <div class="mb-3 row">
-                                <label for="content" class="col-sm-3 col-form-label">Isi</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control @error('content') is-invalid @enderror" value="{{ old('content') }}" name="content" placeholder="Isi..." required>
-                                </div>
-                                @error('content')
-                                <div class="invalid-feedback">
-                                    {{ $message; }}
-                                </div>
-                                @enderror
-                            </div>
-
                             <div class="mb-3 row">
                                 <label for="letter_file" class="col-sm-3 col-form-label">File</label>
                                 <div class="col-sm-9">
                                     <input type="file" class="form-control @error('letter_file') is-invalid @enderror" value="{{ old('letter_file') }}" name="letter_file" required>
-                                    <div id="letter_file" class="form-text">Ekstensi .pdf</div>
+                                    <div id="letter_file" class="form-text">Ekstensi .pdf | <span style="color: blue;"> * Harus diisi</span></div>
                                 </div>
                                 @error('letter_file')
                                 <div class="invalid-feedback">

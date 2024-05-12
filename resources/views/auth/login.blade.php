@@ -12,8 +12,8 @@
                     </div> -->
                     <br>
                     <h3 class="fw-light text-center mt-3"><b>LOGIN E-ARSIP SURAT</b></h3>
-                    <h3 class="fw-light text-center mb-3"><b>IAHN GDE PUDJA MATARAM</b></h3>
-                    <div class="col-xl-4 col-xxl-12 text-center"><img class="img-fluid" src="/admin/assets/img/iahn.jpeg" style="max-width: 11rem" /></div>
+                    <!-- <h3 class="fw-light text-center mb-3"><b></b></h3> -->
+                    <div class="col-xl-12 col-xxl-12 text-center"><img class="img-fluid" src="/admin/assets/img/logo.png" style="max-width: 11rem" /></div>
                     <div class="card-body">
                         @if (session()->has('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">

@@ -1,7 +1,7 @@
-@extends('layouts.admin')
+@extends('layouts.staff')
 
 @section('title')
-Tambah Surat Keluar
+Ubah Surat Keluar
 @endsection
 
 @section('container')
@@ -13,14 +13,14 @@ Tambah Surat Keluar
                     <div class="col-auto mb-3">
                         <h1 class="page-header-title">
                             <div class="page-header-icon"><i data-feather="file-text"></i></div>
-                            Tambah Surat Keluar
+                            Ubah Surat Keluar
                         </h1>
                     </div>
                     <div class="col-12 col-xl-auto mb-3">
-                        <a class="btn btn-sm btn-light text-primary" href="{{ route('surat-keluar') }}">
+                        <button class="btn btn-sm btn-light text-primary" onclick="javascript:window.history.back();">
                             <i class="me-1" data-feather="arrow-left"></i>
-                            Kembali ke Semua Surat keluar
-                        </a>
+                            Kembali Ke Semua Surat
+                        </button>
                     </div>
                 </div>
             </div>
@@ -38,18 +38,19 @@ Tambah Surat Keluar
             <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         @endif
-        <form action="{{ route('letterout.store') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('letterout.update', $item->id) }}" method="post" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
             <div class="row gx-4">
                 <div class="col-lg-9">
                     <div class="card mb-4">
-                        <div class="card-header">Form Surat Keluar</div>
+                        <div class="card-header">Form Surat</div>
                         <div class="card-body">
                             <div class="mb-3 row">
                                 <label for="letter_type" class="col-sm-3 col-form-label">Jenis Surat</label>
                                 <div class="col-sm-9">
                                     <select name="letter_type" class="form-control" required>
-                                        <option value="Surat Keluar" {{ (old('letter_type') == 'Surat Keluar')? 'selected':''; }}>Surat Keluar</option>
+                                        <option value="Surat Keluar" {{ ($item->letter_type == 'Surat Keluar')? 'selected':''; }}>Surat Keluar</option>
                                     </select>
                                 </div>
                                 @error('letter_type')
@@ -61,7 +62,7 @@ Tambah Surat Keluar
                             <div class="mb-3 row">
                                 <label for="letter_no" class="col-sm-3 col-form-label">No. Surat</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control @error('letter_no') is-invalid @enderror" value="{{ old('letter_no') }}" name="letter_no" placeholder="Nomor Surat.." required>
+                                    <input type="text" class="form-control @error('letter_no') is-invalid @enderror" value="{{ $item->letter_no }}" name="letter_no" placeholder="Nomor Surat.." required>
                                 </div>
                                 @error('letter_no')
                                 <div class="invalid-feedback">
@@ -72,7 +73,7 @@ Tambah Surat Keluar
                             <div class="mb-3 row">
                                 <label for="letterout_date" class="col-sm-3 col-form-label">Tanggal Surat</label>
                                 <div class="col-sm-9">
-                                    <input type="date" class="form-control @error('letterout_date') is-invalid @enderror" value="{{ old('letterout_date') }}" name="letterout_date" required>
+                                    <input type="date" class="form-control @error('letterout_date') is-invalid @enderror" value="{{ $item->letterout_date }}" name="letterout_date" required>
                                 </div>
                                 @error('letterout_date')
                                 <div class="invalid-feedback">
@@ -81,10 +82,10 @@ Tambah Surat Keluar
                                 @enderror
                             </div>
 
-                            <!-- <div class="mb-3 row">
+                            <div class="mb-3 row">
                                 <label for="first_number" class="col-sm-3 col-form-label">No. Awal</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control @error('first_number') is-invalid @enderror" value="{{ old('first_number') }}" name="first_number" placeholder="Nomor Awal.." required>
+                                    <input type="text" class="form-control @error('first_number') is-invalid @enderror" value="{{ $item->first_number }}" name="first_number" placeholder="Nomor Awal.." required>
                                 </div>
                                 @error('first_number')
                                 <div class="invalid-feedback">
@@ -95,19 +96,19 @@ Tambah Surat Keluar
                             <div class="mb-3 row">
                                 <label for="temp_number" class="col-sm-3 col-form-label">No. Urut Sementara</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control @error('temp_number') is-invalid @enderror" value="{{ old('temp_number') }}" name="temp_number" placeholder="Nomor Urut Sementara.." required>
+                                    <input type="text" class="form-control @error('temp_number') is-invalid @enderror" value="{{ $item->temp_number }}" name="temp_number" placeholder="Nomor Urut Sementara.." required>
                                 </div>
                                 @error('temp_number')
                                 <div class="invalid-feedback">
                                     {{ $message; }}
                                 </div>
                                 @enderror
-                            </div> -->
+                            </div>
 
                             <div class="mb-3 row">
                                 <label for="regarding" class="col-sm-3 col-form-label">Perihal</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control @error('regarding') is-invalid @enderror" value="{{ old('regarding') }}" name="regarding" placeholder="Perihal.." required>
+                                    <input type="text" class="form-control @error('regarding') is-invalid @enderror" value="{{ $item->regarding }}" name="regarding" placeholder="Perihal.." required>
                                 </div>
                                 @error('regarding')
                                 <div class="invalid-feedback">
@@ -118,7 +119,7 @@ Tambah Surat Keluar
                             <div class="mb-3 row">
                                 <label for="purpose" class="col-sm-3 col-form-label">Tujuan</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control @error('purpose') is-invalid @enderror" value="{{ old('purpose') }}" name="purpose" placeholder="Tujuan..." required>
+                                    <input type="text" class="form-control @error('purpose') is-invalid @enderror" value="{{ $item->purpose }}" name="purpose" placeholder="Tujuan.." required>
                                 </div>
                                 @error('purpose')
                                 <div class="invalid-feedback">
@@ -130,7 +131,7 @@ Tambah Surat Keluar
                             <div class="mb-3 row">
                                 <label for="attribute" class="col-sm-3 col-form-label">Sifat</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control @error('attribute') is-invalid @enderror" value="{{ old('attribute') }}" name="attribute" placeholder="Sifat..." required>
+                                    <input type="text" class="form-control @error('attribute') is-invalid @enderror" value="{{ $item->attribute }}" name="attribute" placeholder="Sifat.." required>
                                 </div>
                                 @error('attribute')
                                 <div class="invalid-feedback">
@@ -141,7 +142,7 @@ Tambah Surat Keluar
                             <div class="mb-3 row">
                                 <label for="copy" class="col-sm-3 col-form-label">Tembusan</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control @error('copy') is-invalid @enderror" value="{{ old('copy') }}" name="copy" placeholder="Tembusan..." required>
+                                    <input type="text" class="form-control @error('copy') is-invalid @enderror" value="{{ $item->copy }}" name="copy" placeholder="Tembusan.." required>
                                 </div>
                                 @error('copy')
                                 <div class="invalid-feedback">
@@ -152,7 +153,7 @@ Tambah Surat Keluar
                             <div class="mb-3 row">
                                 <label for="content" class="col-sm-3 col-form-label">Isi</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control @error('content') is-invalid @enderror" value="{{ old('content') }}" name="content" placeholder="Isi..." required>
+                                    <input type="text" class="form-control @error('content') is-invalid @enderror" value="{{ $item->content }}" name="content" placeholder="Isi.." required>
                                 </div>
                                 @error('content')
                                 <div class="invalid-feedback">
@@ -164,8 +165,8 @@ Tambah Surat Keluar
                             <div class="mb-3 row">
                                 <label for="letter_file" class="col-sm-3 col-form-label">File</label>
                                 <div class="col-sm-9">
-                                    <input type="file" class="form-control @error('letter_file') is-invalid @enderror" value="{{ old('letter_file') }}" name="letter_file" required>
-                                    <div id="letter_file" class="form-text">Ekstensi .pdf</div>
+                                    <input type="file" class="form-control @error('letter_file') is-invalid @enderror" value="{{ old('letter_file') }}" name="letter_file">
+                                    <div id="letter_file" class="form-text">Ekstensi .pdf | Kosongkan file jika tidak diisi</div>
                                 </div>
                                 @error('letter_file')
                                 <div class="invalid-feedback">
@@ -176,7 +177,7 @@ Tambah Surat Keluar
                             <div class="mb-3 row">
                                 <label for="letter_file" class="col-sm-3 col-form-label"></label>
                                 <div class="col-sm-9">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <button type="submit" class="btn btn-primary">Ubah</button>
                                 </div>
                             </div>
                         </div>

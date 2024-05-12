@@ -18,7 +18,7 @@
             <tr>
                 <td valign="top">
                     <div align="center">
-                        <span style="font-size: x-small;"><img src="/admin/assets/img/iahn.jpeg" style="max-width: 7rem;" alt="Gambar iahn"></span>
+                        <span style="font-size: x-small;"><img src="/admin/assets/img/logo.png" style="max-width: 7rem;" alt="Gambar iahn"></span>
                     </div>
                 </td>
                 <td colspan="2">
@@ -26,13 +26,13 @@
                         <tbody>
                             <tr>
                                 <td width="100%"><span style="font-size: x-small;">
-                                        <h6>KEMENTERIAN AGAMA REPUBLIK INDONESIA <br>INSTITUT AGAMA HINDU GDE PUDJA MATARAM</h6>
+                                        <h6>UNIVERSITAS PALANGKA RAYA</h6>
                                 </td>
                             </tr>
                             <tr>
                                 <td width="100%"><span style="font-size: x-small;">
                                         <center>
-                                            <pre>Jalan Pancaka No. 7 B Mataram 83126 <br> Telepon (0370) 628382; Faksimili (0370) 631725,<br> www.iahn-gdepudja.ac.id, email : info@iahn-gdepudja.ac.id</pre>
+                                            <pre>Jln. Yos Sudarso Palangka Raya Kalimantan Tengah, 73111 <br> www.upr.ac.id</pre>
                                         </center>
                                     </span></td>
                             </tr>

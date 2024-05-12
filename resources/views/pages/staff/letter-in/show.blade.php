@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.staff')
 
 @section('title')
 Detail Surat
@@ -46,46 +46,31 @@ Detail Surat
                                     </tr>
                                     <tr>
                                         <th>Tanggal Surat</th>
-                                        <td>{{ Carbon\Carbon::parse($item->letterout_date)->translatedFormat('l, d F Y') }}</td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>Nomor Awal</th>
-                                        <td>{{ $item->first_number }}</td>
+                                        <td>{{ Carbon\Carbon::parse($item->letter_date)->translatedFormat('l, d F Y') }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Nomor Urut Sementara</th>
-                                        <td>{{ $item->temp_number }}</td>
+                                        <th>Tanggal Diterima</th>
+                                        <td>{{ Carbon\Carbon::parse($item->date_received)->translatedFormat('l, d F Y') }}</td>
                                     </tr>
-
+                                    <tr>
+                                        <th>No.Agenda</th>
+                                        <td>{{ $item->agenda_no }}</td>
+                                    </tr>
                                     <tr>
                                         <th>Perihal</th>
                                         <td>{{ $item->regarding }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Tujuan</th>
-                                        <td>{{ $item->purpose }}</td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>Sifat</th>
-                                        <td>{{ $item->attribute }}</td>
+                                        <th>Tujuan Disposisi</th>
+                                        <td>{{ $item->disposisi }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Tembusan</th>
-                                        <td>{{ $item->copy }}</td>
+                                        <th>Pengirim Surat</th>
+                                        <td>{{ $item->sender->name }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Isi</th>
-                                        <td>{{ $item->content }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Tanggal dibuat</th>
-                                        <td>{{ Carbon\Carbon::parse($item->created_at)->translatedFormat('l, d F Y') }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Tanggal diubah</th>
-                                        <td>{{ Carbon\Carbon::parse($item->updated_at)->translatedFormat('l, d F Y') }}</td>
+                                        <th>Departemen</th>
+                                        <td>{{ $item->department->name }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -97,7 +82,7 @@ Detail Surat
                 <div class="card mb-4">
                     <div class="card-header">
                         File Surat -
-                        <a href="{{ route('download-surat-keluar', $item->id) }}" class="btn btn-sm btn-primary">
+                        <a href="{{ route('download-surat', $item->id) }}" class="btn btn-sm btn-primary">
                             <i class="fa fa-download" aria-hidden="true"></i> &nbsp; Download Surat
                         </a>
                     </div>

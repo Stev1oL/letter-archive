@@ -63,10 +63,10 @@ Surat Disposisi
                                 <thead>
                                     <tr>
                                         <th width="10">No.</th>
-                                        <th>No.Surat</th>
+                                        <th>No. Surat</th>
                                         <th>Lampiran</th>
                                         <th>Status</th>
-                                        <th>tgl_selesai</th>
+                                        <th>Tanggal Selesai</th>
                                         <th>Disposisi</th>
                                         <th>Kepada</th>
                                         <th>Aksi</th>
