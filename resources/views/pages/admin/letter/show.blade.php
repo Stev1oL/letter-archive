@@ -1,3 +1,7 @@
+<?php
+// dd(url('storage/app/public/admin/assets/kEyZYAkN9athx0BTyZEuDInjeSRHHnWON3DdxEkj.pdf'));
+// dd(url('public/admin/assets/RhN71iTGMs8FPwnkORXs0dMJrjat3q157t0osck2.pdf'));
+?>
 @extends('layouts.admin')
 
 @section('title')
@@ -88,7 +92,7 @@ Detail Surat
                     </div>
                     <div class="card-body">
                         <div class="mb-3 row">
-                            <embed src="{{ Storage::url($item->letter_file) }}" width="500" height="375" type="application/pdf">
+                            <embed src="{{ asset('admin/assets/$item->id') }}" width="500" height="375" type="application/pdf">
                         </div>
                     </div>
                 </div>

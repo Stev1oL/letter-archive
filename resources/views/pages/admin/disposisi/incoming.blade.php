@@ -69,6 +69,7 @@ Surat Disposisi
                                         <th>Tanggal Selesai</th>
                                         <th>Disposisi</th>
                                         <th>Kepada</th>
+                                        <th>Status Surat</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -121,7 +122,10 @@ Surat Disposisi
                 data: 'kepada',
                 name: 'kepada'
             },
-
+            {
+                data: 'check_status',
+                name: 'check_status'
+            },
             {
                 data: 'action',
                 name: 'action',

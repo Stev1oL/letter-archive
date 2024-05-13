@@ -11,6 +11,7 @@ use App\Models\Sender;
 
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class LetterController extends Controller
 {
@@ -25,10 +26,17 @@ class LetterController extends Controller
         $departments = Department::all();
         $senders = Sender::all();
 
-        return view('pages.admin.letter.create',[
-            'departments' => $departments,
-            'senders' => $senders,
-        ]);
+        if (Auth::user()->role === 'super_admin') {
+            return view('pages.admin.letter.create', [
+                'departments' => $departments,
+                'senders' => $senders,
+            ]);
+        } elseif (Auth::user()->role === 'admin') {
+            return view('pages.staff.letter-in.create', [
+                'departments' => $departments,
+                'senders' => $senders,
+            ]);
+        }
     }
 
     public function store(Request $request)
@@ -49,8 +57,8 @@ class LetterController extends Controller
         if ($request->input('disposisi')) {
             $validatedData['disposisi'] = implode(',', $request->disposisi);
         }
-        if($request->file('letter_file')){
-            $validatedData['letter_file'] = $request->file('letter_file')->store('assets/letter-file');
+        if ($request->file('letter_file')) {
+            $validatedData['letter_file'] = $request->file('letter_file')->store('public/admin/assets/');
         }
         if ($validatedData['letter_type'] == 'Surat Masuk') {
             $redirect = 'surat-masuk';
@@ -58,86 +66,135 @@ class LetterController extends Controller
         Letter::create($validatedData);
 
         return redirect()
-                    ->route($redirect)
-                    ->with('success', 'Sukses! 1 Data Berhasil Disimpan');
+            ->route($redirect)
+            ->with('success', 'Sukses! 1 Data Berhasil Disimpan');
     }
 
     public function incoming_mail()
     {
         if (request()->ajax()) {
-            $query = Letter::with(['department','sender'])->where('letter_type', 'Surat Masuk')->latest()->get();
+            $query = Letter::with(['department', 'sender'])->where('letter_type', 'Surat Masuk')->latest()->get();
 
             return Datatables::of($query)
                 ->addColumn('action', function ($item) {
-                    return '
+                    if (Auth::user()->role === 'super_admin') {
+                        return '
                         <a class="btn btn-success btn-xs" href="' . route('detail-surat', $item->id) . '">
                             <i class="fa fa-search-plus"></i> &nbsp; Detail
                         </a>
                         <a class="btn btn-primary btn-xs" href="' . route('letter.edit', $item->id) . '">
                             <i class="fas fa-edit"></i> &nbsp; Ubah
                         </a>
-                        <form action="' . route('letter.destroy', $item->id) . '" method="POST" onsubmit="return confirm('."'Anda akan menghapus item ini dari situs anda?'".')">
+                        <form action="' . route('letter.destroy', $item->id) . '" method="POST" onsubmit="return confirm(' . "'Anda akan menghapus item ini dari situs anda?'" . ')">
                             ' . method_field('delete') . csrf_field() . '
                             <button class="btn btn-danger btn-xs">
                                 <i class="far fa-trash-alt"></i> &nbsp; Hapus
                             </button>
                         </form>
                     ';
+                    } elseif (Auth::user()->role === 'admin') {
+                        return '
+                        <a class="btn btn-success btn-xs" href="' . route('detail-surat-staff', $item->id) . '">
+                            <i class="fa fa-search-plus"></i> &nbsp; Detail
+                        </a>
+                        <a class="btn btn-primary btn-xs" href="' . route('letter-in.edit', $item->id) . '">
+                            <i class="fas fa-edit"></i> &nbsp; Ubah
+                        </a>
+                        <form action="' . route('letter.destroy', $item->id) . '" method="POST" onsubmit="return confirm(' . "'Anda akan menghapus item ini dari situs anda?'" . ')">
+                            ' . method_field('delete') . csrf_field() . '
+                            <button class="btn btn-danger btn-xs">
+                                <i class="far fa-trash-alt"></i> &nbsp; Hapus
+                            </button>
+                        </form>
+                    ';
+                    }
                 })
                 ->editColumn('post_status', function ($item) {
-                   return $item->post_status == 'Published' ? '<div class="badge bg-green-soft text-green">'.$item->post_status.'</div>':'<div class="badge bg-gray-200 text-dark">'.$item->post_status.'</div>';
+                    return $item->post_status == 'Published' ? '<div class="badge bg-green-soft text-green">' . $item->post_status . '</div>' : '<div class="badge bg-gray-200 text-dark">' . $item->post_status . '</div>';
                 })
                 ->addIndexColumn()
                 ->removeColumn('id')
-                ->rawColumns(['action','post_status'])
+                ->rawColumns(['action', 'post_status'])
                 ->make();
         }
 
-        return view('pages.admin.letter.incoming');
+        if (Auth::user()->role === 'super_admin') {
+            return view('pages.admin.letter.incoming');
+        } elseif (Auth::user()->role === 'admin') {
+            return view('pages.staff.letter-in.incoming');
+        }
     }
 
     public function outgoing_mail()
     {
         if (request()->ajax()) {
-            $query = Letter::with(['department','sender'])->where('letter_type', 'Surat Keluar')->latest()->get();
+            $query = Letter::with(['department', 'sender'])->where('letter_type', 'Surat Keluar')->latest()->get();
 
             return Datatables::of($query)
                 ->addColumn('action', function ($item) {
-                    return '
-                        <a class="btn btn-success btn-xs" href="' . route('detail-surat', $item->id) . '">
+                    if (Auth::user()->role === 'super_admin') {
+                        return '
+                        <a class="btn btn-success btn-xs" href="' . route('detail-surat-staff', $item->id) . '">
                             <i class="fa fa-search-plus"></i> &nbsp; Detail
                         </a>
-                        <a class="btn btn-primary btn-xs" href="' . route('letter.edit', $item->id) . '">
+                        <a class="btn btn-primary btn-xs" href="' . route('letter-out.edit', $item->id) . '">
                             <i class="fas fa-edit"></i> &nbsp; Ubah
                         </a>
                        
-                        <form action="' . route('letter.destroy', $item->id) . '" method="POST" onsubmit="return confirm('."'Anda akan menghapus item ini dari situs anda?'".')">
+                        <form action="' . route('letter-out.destroy', $item->id) . '" method="POST" onsubmit="return confirm(' . "'Anda akan menghapus item ini dari situs anda?'" . ')">
                             ' . method_field('delete') . csrf_field() . '
                             <button class="btn btn-danger btn-xs">
                                 <i class="far fa-trash-alt"></i> &nbsp; Hapus
                             </button>
                         </form>
                     ';
+                    } elseif (Auth::user()->role === 'admin') {
+                        return '
+                        <a class="btn btn-success btn-xs" href="' . route('detail-surat-staff', $item->id) . '">
+                            <i class="fa fa-search-plus"></i> &nbsp; Detail
+                        </a>
+                        <a class="btn btn-primary btn-xs" href="' . route('staff.letter-in.edit', $item->id) . '">
+                            <i class="fas fa-edit"></i> &nbsp; Ubah
+                        </a>
+                       
+                        <form action="' . route('letter-in.destroy', $item->id) . '" method="POST" onsubmit="return confirm(' . "'Anda akan menghapus item ini dari situs anda?'" . ')">
+                            ' . method_field('delete') . csrf_field() . '
+                            <button class="btn btn-danger btn-xs">
+                                <i class="far fa-trash-alt"></i> &nbsp; Hapus
+                            </button>
+                        </form>
+                    ';
+                    }
                 })
                 ->editColumn('post_status', function ($item) {
-                   return $item->post_status == 'Published' ? '<div class="badge bg-green-soft text-green">'.$item->post_status.'</div>':'<div class="badge bg-gray-200 text-dark">'.$item->post_status.'</div>';
+                    return $item->post_status == 'Published' ? '<div class="badge bg-green-soft text-green">' . $item->post_status . '</div>' : '<div class="badge bg-gray-200 text-dark">' . $item->post_status . '</div>';
                 })
                 ->addIndexColumn()
                 ->removeColumn('id')
-                ->rawColumns(['action','post_status'])
+                ->rawColumns(['action', 'post_status'])
                 ->make();
         }
 
-        return view('pages.admin.letter.outgoing');
+        if (Auth::user()->role === 'super_admin') {
+            return view('pages.admin.letter.outgoing');
+        } elseif (Auth::user()->role === 'admin') {
+            return view('pages.staff.letter-in.outgoing');
+        }
     }
 
     public function show($id)
     {
-        $item = Letter::with(['department','sender'])->findOrFail($id);
+        $item = Letter::with(['department', 'sender'])->findOrFail($id);
 
-        return view('pages.admin.letter.show',[
-            'item' => $item,
-        ]);
+        if (Auth::user()->role === 'super_admin') {
+            return view('pages.admin.letter.show', [
+                'item' => $item,
+            ]);
+        } elseif (Auth::user()->role === 'admin') {
+            return view('pages.staff.letter-in.show', [
+                'item' => $item,
+            ]);
+        }
     }
 
     public function edit($id)
@@ -147,12 +204,21 @@ class LetterController extends Controller
         $departments = Department::all();
         $senders = Sender::all();
 
-        return view('pages.admin.letter.edit',[
-            'departments' => $departments,
-            'senders' => $senders,
-            'item' => $item,
-            'disposisi' => explode(',', $item->disposisi),
-        ]);
+        if (Auth::user()->role === 'super_admin') {
+            return view('pages.admin.letter.edit', [
+                'departments' => $departments,
+                'senders' => $senders,
+                'item' => $item,
+                'disposisi' => explode(',', $item->disposisi),
+            ]);
+        } elseif (Auth::user()->role === 'admin') {
+            return view('pages.staff.letter-in.edit', [
+                'departments' => $departments,
+                'senders' => $senders,
+                'item' => $item,
+                'disposisi' => explode(',', $item->disposisi),
+            ]);
+        }
     }
 
     public function download_letter($id)
@@ -179,7 +245,7 @@ class LetterController extends Controller
 
         $item = Letter::findOrFail($id);
 
-        if($request->file('letter_file')){
+        if ($request->file('letter_file')) {
             $validatedData['letter_file'] = $request->file('letter_file')->store('assets/letter-file');
         }
         if ($request->input('disposisi')) {
@@ -192,8 +258,8 @@ class LetterController extends Controller
         $item->update($validatedData);
 
         return redirect()
-                    ->route($redirect)
-                    ->with('success', 'Sukses! 1 Data Berhasil Diubah');
+            ->route($redirect)
+            ->with('success', 'Sukses! 1 Data Berhasil Diubah');
     }
 
     public function destroy($id)
@@ -201,9 +267,17 @@ class LetterController extends Controller
         $item = Letter::findorFail($id);
 
         if ($item->letter_type == 'Surat Masuk') {
-            $redirect = 'surat-masuk';
+            if (Auth::user()->role === 'super_admin') {
+                $redirect = 'surat-masuk';
+            } elseif (Auth::user()->role === 'admin') {
+                $redirect = 'staff.letter-in.surat-masuk';
+            }
         } else {
-            $redirect = 'surat-keluar';
+            if (Auth::user()->role === 'super_admin') {
+                $redirect = 'surat-keluar';
+            } elseif (Auth::user()->role === 'admin') {
+                $redirect = 'staff.letter-in.surat-keluar';
+            }
         }
 
         Storage::delete($item->letter_file);
@@ -211,11 +285,15 @@ class LetterController extends Controller
         $item->delete();
 
         return redirect()
-                    ->route($redirect)
-                    ->with('success', 'Sukses! 1 Data Berhasil Dihapus');
+            ->route($redirect)
+            ->with('success', 'Sukses! 1 Data Berhasil Dihapus');
     }
     public function cobaCetak()
     {
-        return view('pages.admin.letter.cetak-disposisi');
+        if (Auth::user()->role === 'super_admin') {
+            return view('pages.admin.letter.cetak-disposisi');
+        } elseif (Auth::user()->role === 'admin') {
+            return view('pages.staff.letter-in.cetak-disposisi');
+        }
     }
 }

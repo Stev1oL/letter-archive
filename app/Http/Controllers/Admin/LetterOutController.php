@@ -9,6 +9,7 @@ use App\Models\Letterout;
 
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class LetteroutController extends Controller
 {
@@ -20,7 +21,11 @@ class LetteroutController extends Controller
 
     public function create()
     {
-        return view('pages.admin.letterout.create');
+        if (Auth::user()->role === 'super_admin') {
+            return view('pages.admin.letterout.create');
+        } elseif (Auth::user()->role === 'admin') {
+            return view('pages.staff.letter-out.create');
+        }
     }
 
     public function store(Request $request)
@@ -40,7 +45,7 @@ class LetteroutController extends Controller
         ]);
 
         if ($request->file('letter_file')) {
-            $validatedData['letter_file'] = $request->file('letter_file')->store('assets/letter-file');
+            $validatedData['letter_file'] = $request->file('letter_file')->store('public/admin/assets/');
         }
 
         if ($validatedData['letter_type'] == 'Surat Keluar') {
@@ -61,20 +66,40 @@ class LetteroutController extends Controller
 
             return Datatables::of($query)
                 ->addColumn('action', function ($item) {
-                    return '
-                        <a class="btn btn-success btn-xs" href="' . route('detail-surat-keluar', $item->id) . '">
-                            <i class="fa fa-search-plus"></i> &nbsp; Detail
-                        </a>
-                        <a class="btn btn-primary btn-xs" href="' . route('letterout.edit', $item->id) . '">
-                            <i class="fas fa-edit"></i> &nbsp; Ubah
-                        </a>
-                        <form action="' . route('letterout.destroy', $item->id) . '" method="POST" onsubmit="return confirm(' . "'Anda akan menghapus item ini dari situs anda?'" . ')">
-                            ' . method_field('delete') . csrf_field() . '
-                            <button class="btn btn-danger btn-xs">
-                                <i class="far fa-trash-alt"></i> &nbsp; Hapus
-                            </button>
-                        </form>
-                    ';
+                    if (Auth::user()->role === 'super_admin') {
+                        return '
+                            <a class="btn btn-success btn-xs" href="' . route('detail-surat-keluar', $item->id) . '">
+                                <i class="fa fa-search-plus"></i> &nbsp; Detail
+                            </a>
+                            <a class="btn btn-primary btn-xs" href="' . route('letterout.edit', $item->id) . '">
+                                <i class="fas fa-edit"></i> &nbsp; Ubah
+                            </a>
+                            <form action="' . route('letterout.destroy', $item->id) . '" method="POST" onsubmit="return confirm(' . "'Anda akan menghapus item ini dari situs anda?'" . ')">
+                                ' . method_field('delete') . csrf_field() . '
+                                <button class="btn btn-danger btn-xs">
+                                    <i class="far fa-trash-alt"></i> &nbsp; Hapus
+                                </button>
+                            </form>
+                            <a class="btn btn-info btn-xs" href="' . route('layout-surat-keluar', $item->id) . '" target="_blank">
+                                <i class="fas fa-print"></i> &nbsp; Cetak Surat
+                            </a>
+                        ';
+                    } elseif (Auth::user()->role === 'admin') {
+                        return '
+                            <a class="btn btn-success btn-xs" href="' . route('detail-surat-keluar-staff', $item->id) . '">
+                                <i class="fa fa-search-plus"></i> &nbsp; Detail
+                            </a>
+                            <a class="btn btn-primary btn-xs" href="' . route('letter-out.edit', $item->id) . '">
+                                <i class="fas fa-edit"></i> &nbsp; Ubah
+                            </a>
+                            <form action="' . route('letter-out.destroy', $item->id) . '" method="POST" onsubmit="return confirm(' . "'Anda akan menghapus item ini dari situs anda?'" . ')">
+                                ' . method_field('delete') . csrf_field() . '
+                                <button class="btn btn-danger btn-xs">
+                                    <i class="far fa-trash-alt"></i> &nbsp; Hapus
+                                </button>
+                            </form>
+                        ';
+                    }
                 })
                 ->editColumn('post_status', function ($item) {
                     return $item->post_status == 'Published' ? '<div class="badge bg-green-soft text-green">' . $item->post_status . '</div>' : '<div class="badge bg-gray-200 text-dark">' . $item->post_status . '</div>';
@@ -85,25 +110,41 @@ class LetteroutController extends Controller
                 ->make();
         }
 
-        return view('pages.admin.letterout.outgoing');
+        if (Auth::user()->role === 'super_admin') {
+            return view('pages.admin.letterout.outgoing');
+        } elseif (Auth::user()->role === 'admin') {
+            return view('pages.admin.letterout.outgoing');
+        }
     }
 
     public function show($id)
     {
         $item = Letterout::findOrFail($id);
 
-        return view('pages.admin.letterout.show', [
-            'item' => $item,
-        ]);
+        if (Auth::user()->role === 'super_admin') {
+            return view('pages.admin.letterout.show', [
+                'item' => $item,
+            ]);
+        } elseif (Auth::user()->role === 'admin') {
+            return view('pages.staff.letter-out.show', [
+                'item' => $item,
+            ]);
+        }
     }
 
     public function edit($id)
     {
         $item = Letterout::findOrFail($id);
 
-        return view('pages.admin.letterout.edit', [
-            'item' => $item,
-        ]);
+        if (Auth::user()->role === 'super_admin') {
+            return view('pages.admin.letterout.edit', [
+                'item' => $item,
+            ]);
+        } elseif (Auth::user()->role === 'admin') {
+            return view('pages.staff.letter-out.edit', [
+                'item' => $item,
+            ]);
+        }
     }
 
     public function download_letter($id)
@@ -158,5 +199,13 @@ class LetteroutController extends Controller
         return redirect()
             ->route($redirect)
             ->with('success', 'Sukses! 1 Data Berhasil Dihapus');
+    }
+
+    public function print_letter($id)
+    {
+        $item = Letterout::findOrFail($id);
+        return view('pages.admin.letterout.print-letter', [
+            'item' => $item
+        ]);
     }
 }

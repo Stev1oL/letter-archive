@@ -97,7 +97,7 @@ Detail Surat
                 <div class="card mb-4">
                     <div class="card-header">
                         File Surat -
-                        <a href="{{ route('download-surat-keluar', $item->id) }}" class="btn btn-sm btn-primary">
+                        <a href="{{ route('download-surat-keluar-staff', $item->id) }}" class="btn btn-sm btn-primary">
                             <i class="fa fa-download" aria-hidden="true"></i> &nbsp; Download Surat
                         </a>
                     </div>

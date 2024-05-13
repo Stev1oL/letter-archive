@@ -139,6 +139,21 @@ Ubah Surat Disposisi
                                 @enderror
                             </div>
                             <div class="mb-3 row">
+                                <label for="check_status" class="col-sm-3 col-form-label">Check Status</label>
+                                <div class="col-sm-9">
+                                    <select name="check_status" class="form-control" required>
+                                        <option value="pending" {{ $item->check_status == 'pending' ? 'selected' : '' }}>Belum Disetujui</option>
+                                        <option value="approved" {{ $item->check_status == 'approved' ? 'selected' : '' }}>Setuju</option>
+                                        <option value="rejected" {{ $item->check_status == 'rejected' ? 'selected' : '' }}>Ditolak</option>
+                                    </select>
+                                </div>
+                                @error('check_status')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 row">
                                 <label for="catatan_rektors" class="col-sm-3 col-form-label">Catatan Rektor</label>
                                 <div class="col-sm-9">
                                     <textarea id="catatan_rektors" class="form-control @error('catatan_rektor') is-invalid @enderror" name="catatan_rektor" placeholder="Catatan Rektor.." required>{{ old('catatan_rektor', $item->catatan_rektor) }}</textarea>

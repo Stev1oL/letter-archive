@@ -26,6 +26,7 @@ class Disposisi extends Model
         'tgl_selesai_3',
         'penerima_2',
         'penerima_3',
+        'check_status',
         'letter_file'
     ];
     // protected $dates = ['tgl_selesai','tgl_aju_kembali','tgl_selesai_2','tgl_selesai_3'];

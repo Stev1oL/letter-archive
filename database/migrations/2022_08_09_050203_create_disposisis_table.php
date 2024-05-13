@@ -32,6 +32,7 @@ class CreateDisposisisTable extends Migration
             $table->date('tgl_selesai_3')->nullable();
             $table->string('penerima_2')->nullable();
             $table->string('penerima_3')->nullable();
+            $table->enum('check_status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->string('letter_file')->nullable();
             $table->timestamps();
         });

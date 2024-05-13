@@ -5,15 +5,15 @@
             <div class="sidenav-menu-heading">Menu</div>
             <!-- Sidenav Link (Dashboard)-->
             @if(Auth::user()->role === 'admin')
-            <a class="nav-link {{ (request()->is('admin/dashboard')) ? 'active' : '' }}" href="{{ route('admin-dashboard') }}">
+            <a class="nav-link {{ (request()->is('staff/dashboard')) ? 'active' : '' }}" href="{{ route('admin-dashboard') }}">
                 <div class="nav-link-icon"><i data-feather="activity"></i></div>
                 Dashboard
             </a>
-            <a class="nav-link {{ (request()->is('admin/letter/surat-masuk')) ? 'active' : '' }}" href="{{ route('surat-masuk') }}">
+            <a class="nav-link {{ (request()->is('staff/letter-in/surat-masuk-staff')) ? 'active' : '' }}" href="{{ route('surat-masuk-staff') }}">
                 <div class="nav-link-icon"><i data-feather="mail"></i></div>
                 Surat Masuk
             </a>
-            <a class="nav-link {{ (request()->is('admin/letterout/surat-keluar')) ? 'active' : '' }}" href="{{ route('surat-keluar') }}">
+            <a class="nav-link {{ (request()->is('staff/letter-out/surat-keluar-staff')) ? 'active' : '' }}" href="{{ route('surat-keluar-staff') }}">
                 <div class="nav-link-icon"><i data-feather="mail"></i></div>
                 Surat Keluar
             </a>

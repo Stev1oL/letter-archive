@@ -49,14 +49,15 @@ class DisposisiController extends Controller
             'tgl_selesai_3' => 'required',
             'penerima_2' => 'required',
             'penerima_3' => 'required',
+            'check_status' => 'in:pending,approved,rejected',
             'letter_file' => 'mimes:pdf|file'
         ]);
-        
+
         if ($request->file('letter_file')) {
             $validatedData['letter_file'] = $request->file('letter_file')->store('assets/letter-file');
         }
-        if($request->input('status')){
-            $validatedData['status'] = implode(',',$request->status);
+        if ($request->input('status')) {
+            $validatedData['status'] = implode(',', $request->status);
         }
         if ($request->input('sifat')) {
             $validatedData['sifat'] = implode(',', $request->sifat);
@@ -64,7 +65,10 @@ class DisposisiController extends Controller
         if ($request->input('petunjuk')) {
             $validatedData['petunjuk'] = implode(',', $request->petunjuk);
         }
-      
+        if ($request->input('check_status')) {
+            $validatedData['check_status'] = 'pending';
+        }
+
         if ($request->input('penerima_disposisi_2')) {
             $validatedData['penerima_disposisi_2'] = implode(',', $request->penerima_disposisi_2);
         }
@@ -140,14 +144,14 @@ class DisposisiController extends Controller
     public function edit($id)
     {
         $item = Disposisi::findOrFail($id);
-        
+
         $letters = Letter::all();
 
         return view('pages.admin.disposisi.edit', [
             'letters' => $letters,
-            'item' => $item, 
+            'item' => $item,
             'status' => explode(',', $item->status),
-            'sifat' => explode(',', $item->sifat), 
+            'sifat' => explode(',', $item->sifat),
             'petunjuk' => explode(',', $item->petunjuk),
             'penerima_disposisi_2' => explode(',', $item->penerima_disposisi_2),
         ]);
@@ -180,6 +184,7 @@ class DisposisiController extends Controller
             'tgl_selesai_3' => 'required',
             'penerima_2' => 'required',
             'penerima_3' => 'required',
+            'check_status' => 'required|in:pending,approved,rejected',
             'letter_file' => 'mimes:pdf|file'
         ]);
 

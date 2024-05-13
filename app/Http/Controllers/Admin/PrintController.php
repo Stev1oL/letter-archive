@@ -13,9 +13,9 @@ class PrintController extends Controller
 {
     public function index()
     {
-        $item = Letter::with(['department','sender'])->where('letter_type', 'Surat Masuk')->latest()->get();
+        $item = Letter::with(['department', 'sender'])->where('letter_type', 'Surat Masuk')->latest()->get();
 
-        return view('pages.admin.letter.print-incoming',[
+        return view('pages.admin.letter.print-incoming', [
             'item' => $item
         ]);
     }
@@ -24,7 +24,7 @@ class PrintController extends Controller
     {
         $item = Letterout::latest()->get();
 
-        return view('pages.admin.letterout.print-outgoing',[
+        return view('pages.admin.letterout.print-outgoing', [
             'item' => $item
         ]);
     }
@@ -36,5 +36,4 @@ class PrintController extends Controller
             'item' => $item
         ]);
     }
-   
 }

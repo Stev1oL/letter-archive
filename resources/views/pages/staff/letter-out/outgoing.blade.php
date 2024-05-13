@@ -28,11 +28,11 @@ Surat Keluar
                     <div class="card-header">
                         Data :
                         <div>
-                            <a class="btn btn-sm btn-warning" href="{{ route('letterout.create') }}">
+                            <a class="btn btn-sm btn-warning" href="{{ route('letter-out.create') }}">
                                 <i data-feather="plus-square"></i> &nbsp;
                                 Tambah Surat
                             </a>
-                            <a class="btn btn-sm btn-success" href="{{ route('print-surat-keluar') }}" target="_blank">
+                            <a class="btn btn-sm btn-success" href="{{ route('print-surat-keluar-staff') }}" target="_blank">
                                 <i data-feather="printer"></i> &nbsp;
                                 Cetak Laporan
                             </a>

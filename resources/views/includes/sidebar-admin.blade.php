@@ -38,11 +38,11 @@
                 <div class="nav-link-icon"><i data-feather="activity"></i></div>
                 Dashboard
             </a>
-            <a class="nav-link {{ (request()->is('staff/letter-in/surat-masuk')) ? 'active' : '' }}" href="{{ route('surat-masuk') }}">
+            <a class="nav-link {{ (request()->is('staff/letter-in/surat-masuk')) ? 'active' : '' }}" href="{{ route('surat-masuk-staff') }}">
                 <div class="nav-link-icon"><i data-feather="mail"></i></div>
                 Surat Masuk
             </a>
-            <a class="nav-link {{ (request()->is('staff/letter-out/surat-keluar')) ? 'active' : '' }}" href="{{ route('surat-keluar') }}">
+            <a class="nav-link {{ (request()->is('staff/letter-out/surat-keluar')) ? 'active' : '' }}" href="{{ route('surat-keluar-staff') }}">
                 <div class="nav-link-icon"><i data-feather="mail"></i></div>
                 Surat Keluar
             </a>
